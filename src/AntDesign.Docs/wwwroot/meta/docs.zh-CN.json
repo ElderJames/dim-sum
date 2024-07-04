@@ -1,11 +1,5 @@
 [
   {
-    "Order": 6,
-    "Title": "更新日志",
-    "Type": "menuItem",
-    "Url": "docs/CHANGELOG"
-  },
-  {
     "Order": 11,
     "Title": "贡献指南",
     "Type": "menuItem",
