@@ -18,29 +18,34 @@ namespace AntDesign.Docs.Generator
                 .Where(static (text) => text.Path.EndsWith(".md"))
                 .Select(static (text, cancellationToken) =>
                 {
-                    var name = Path.GetFileName(text.Path);
-                    var code = GeneratorPages(name, text.GetText(cancellationToken)!.ToString());
-                    return (name, code);
+                    var fileNameParts = Path.GetFileNameWithoutExtension(text.Path).Split('.');
+                    var name = fileNameParts[0];
+                    var locale = fileNameParts[1];
+                    var html = GeneratorPages(name, locale, text.GetText(cancellationToken)!.ToString());
+                    return (name, locale, html);
                 });
 
             context.RegisterSourceOutput(pipeline,
                 static (context, pair) =>
                     // Note: this AddSource is simplified. You will likely want to include the path in the name of the file to avoid
                     // issues with duplicate file names in different paths in the same project.
-                    context.AddSource($"{pair.name}generated.cs", SourceText.From(pair.code, Encoding.UTF8)));
+                    context.AddSource($"{pair.locale}/{pair.name}.g.cs", SourceText.From(pair.html, Encoding.UTF8)));
         }
 
-        private static string GeneratorPages(string name, string text)
+        private static string GeneratorPages(string name, string locale, string text)
         {
             var html = Markdown.ToHtml(text);
             var template = """
-                                
+                using Microsoft.AspNetCore.Components;
+                using Microsoft.AspNetCore.Components.Rendering;
+
                 namespace AntDesign.Docs.Demos.Pages;
 
-                [Route("/docs/{{name}}")]
-                public class {{name}}Component : ComponentBase
+                [Route("{{url}}")]
+                public class {{className}}Component : ComponentBase
                 {
-                    string html = {{html}};
+                    string html =
+                {{html}};
                     protected override void BuildRenderTree(RenderTreeBuilder builder)
                     {
                         builder.AddMarkupContent(0, html);
@@ -49,8 +54,9 @@ namespace AntDesign.Docs.Generator
                 
                 """;
 
-            return template.Replace("{{html}}", $"\"\"\"{html}\"\"\"")
-                .Replace("{{name}})", name);
+            return template.Replace("{{html}}", $"\"\"\"\r\n{html}\r\n\"\"\"")
+                .Replace("{{url}}", $"/{locale}/{name}")
+                .Replace("{{className}}", $"{name}{locale}".ToPascalCase());
         }
     }
 }

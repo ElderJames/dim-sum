@@ -2,7 +2,7 @@
 @using System.Globalization
 
 <ConfigProvider>
-    <Router AppAssembly="typeof(App).Assembly" OnNavigateAsync="OnNavigateAsync">
+    <Router AppAssembly="typeof(App).Assembly" OnNavigateAsync="OnNavigateAsync" AdditionalAssemblies="[typeof(AntDesign.Docs.Demos._Imports).Assembly]">
         <Found Context="routeData">
             <CascadingValue Value="routeData">
                 <RouteView RouteData="routeData" DefaultLayout="typeof(MainLayout)" />
