@@ -26,11 +26,6 @@
     <Compile Include="..\Shared\DocsFile.cs" Link="Services\DocsFile.cs" />
   </ItemGroup>
 
-  <!--<ItemGroup>
-    <ProjectReference Include="..\..\components\AntDesign.csproj" />
-    <ProjectReference Include="..\..\src\AntDesign.Extensions.Localization\AntDesign.Extensions.Localization.csproj" />
-  </ItemGroup>-->
-
   <ItemGroup>
     <Compile Update="Resources\App.Designer.cs">
       <DesignTime>True</DesignTime>

@@ -26,6 +26,10 @@ Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Solution Items", "Solution 
 		README.md = README.md
 	EndProjectSection
 EndProject
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "AntDesign.Docs.Generator", "src\AntDesign.Docs.Generator\AntDesign.Docs.Generator.csproj", "{60BC9E45-8527-43A6-AD0A-B9CCDA51CCEA}"
+EndProject
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "AntDesign.Docs.Demos", "src\AntDesign.Docs.Demos\AntDesign.Docs.Demos.csproj", "{BAFDF08B-A2DF-47C9-A001-3E251EF22010}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -56,6 +60,14 @@ Global
 		{88B45B66-9D05-4FAD-BE7F-3D0218D63496}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{88B45B66-9D05-4FAD-BE7F-3D0218D63496}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{88B45B66-9D05-4FAD-BE7F-3D0218D63496}.Release|Any CPU.Build.0 = Release|Any CPU
+		{60BC9E45-8527-43A6-AD0A-B9CCDA51CCEA}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{60BC9E45-8527-43A6-AD0A-B9CCDA51CCEA}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{60BC9E45-8527-43A6-AD0A-B9CCDA51CCEA}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{60BC9E45-8527-43A6-AD0A-B9CCDA51CCEA}.Release|Any CPU.Build.0 = Release|Any CPU
+		{BAFDF08B-A2DF-47C9-A001-3E251EF22010}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{BAFDF08B-A2DF-47C9-A001-3E251EF22010}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{BAFDF08B-A2DF-47C9-A001-3E251EF22010}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{BAFDF08B-A2DF-47C9-A001-3E251EF22010}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
@@ -67,6 +79,8 @@ Global
 		{DC66FB73-4827-4859-92B2-4F11EA64116E} = {B5E82ED7-42BA-4B47-9E94-B7D4C8E5CB0B}
 		{2840DB7C-00AC-4329-AE44-C9146343563A} = {B5E82ED7-42BA-4B47-9E94-B7D4C8E5CB0B}
 		{88B45B66-9D05-4FAD-BE7F-3D0218D63496} = {B5E82ED7-42BA-4B47-9E94-B7D4C8E5CB0B}
+		{60BC9E45-8527-43A6-AD0A-B9CCDA51CCEA} = {4B12CC52-8F92-4E35-A801-A8D77B3F3C16}
+		{BAFDF08B-A2DF-47C9-A001-3E251EF22010} = {4B12CC52-8F92-4E35-A801-A8D77B3F3C16}
 	EndGlobalSection
 	GlobalSection(ExtensibilityGlobals) = postSolution
 		SolutionGuid = {D631750C-0AB9-4D8D-BCB5-4FFB4B2609E7}

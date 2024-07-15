@@ -15,7 +15,7 @@
         <PropertyColumn Property="c=>c.Id"/>
         <PropertyColumn Property="c=>c.Date" Format="yyyy-MM-dd"/>
         <PropertyColumn Property="c=>c.TemperatureC"/>
-        <PropertyColumn Title="Temp. (F)" Field="@context.TemperatureF"/>
+        <PropertyColumn Title="Temp. (F)" Property="c=>c.TemperatureF"/>
         <PropertyColumn Property="c=>c.Summary"/>
     </Table>
 
