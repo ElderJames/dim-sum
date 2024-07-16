@@ -28,6 +28,7 @@ app.UseStaticFiles();
 app.UseAntiforgery();
 
 app.MapRazorComponents<AntDesign.Docs.App>()
+    .AddAdditionalAssemblies(typeof(Program).Assembly)
     .AddInteractiveServerRenderMode();
 
 app.Run();
