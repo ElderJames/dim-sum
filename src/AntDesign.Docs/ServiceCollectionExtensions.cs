@@ -16,7 +16,6 @@ namespace Microsoft.Extensions.DependencyInjection
         {
             services.AddAntDesign();
             services.AddScoped<DemoService>();
-            services.AddScoped<IconListService>();
             services.AddScoped<IPrismHighlighter, PrismHighlighter>();
             services.AddSingleton<AssemblyService>();
 

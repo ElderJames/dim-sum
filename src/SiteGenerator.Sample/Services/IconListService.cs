@@ -4,23 +4,17 @@ using System.Threading.Tasks;
 
 namespace AntDesign.Docs.Services
 {
-    public class IconListService
+    public static class IconListService
     {
-        private IList<IconItem> _icons;
-        private readonly IconService _iconService;
+        private static IList<IconItem> _icons;
 
-        public IconListService(IconService iconService)
-        {
-            _iconService = iconService;
-        }
-
-        public IList<IconItem> GetIcons()
+        public static IList<IconItem> GetIcons()
         {
             _icons ??= Icons();
             return _icons;
         }
 
-        private IList<IconItem> Icons()
+        private static IList<IconItem> Icons()
         {
             IList<IconItem> icons = new List<IconItem>();
 
@@ -270,7 +264,7 @@ namespace AntDesign.Docs.Services
             return icons;
         }
 
-        private IList<string> GetOtherItems()
+        private static IList<string> GetOtherItems()
         {
             List<string> icons = new List<string>();
 
@@ -284,7 +278,7 @@ namespace AntDesign.Docs.Services
             return icons.Distinct().OrderBy(x => x).ToList();
         }
 
-        public List<IconItem> Search(string word)
+        public static List<IconItem> Search(string word)
         {
             var listOfIcons = GetIcons();
             List<IconItem> lstNewIcons = new List<IconItem>();

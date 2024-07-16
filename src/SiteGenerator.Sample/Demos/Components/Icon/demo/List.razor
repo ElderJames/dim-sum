@@ -1,4 +1,5 @@
-﻿@using Microsoft.Extensions.Localization
+﻿@using AntDesign.Docs.Services
+@using Microsoft.Extensions.Localization
 <div style="display: flex; justify-content: space-between;">
     <RadioGroup @bind-Value="currentTheme" ButtonStyle="@RadioButtonStyle.Solid" Size="large" TValue="string" OnChange="OnThemeChanged">
         <Radio RadioButton Value="@("outline")">
@@ -43,8 +44,6 @@ else
     }
 }
 
-
-@inject AntDesign.Docs.Services.IconListService iconListService
 @inject IconService IconService
 @inject ILocalizationService LocalizationService
 @inject IStringLocalizer Localizer;
@@ -71,13 +70,13 @@ else
             await InvokeAsync(StateHasChanged);
         };
 
-        lstIcons = iconListService.GetIcons();      
+        lstIcons = IconListService.GetIcons();
         await OnThemeChanged(currentTheme);
     }
 
     private async Task OnSearching(string word)
     {
-        lstIcons = iconListService.Search(word);
+        lstIcons = IconListService.Search(word);
         await OnThemeChanged(currentTheme);
 
     }

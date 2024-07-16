@@ -22,8 +22,6 @@
     </DropdownRender>
 </Select>
 
-
-@inject IconListService _iconListService
 @code
 {
     private Dictionary<string, List<string>> _lstIcons;
@@ -31,7 +29,7 @@
 
     protected override void OnInitialized()
     {
-        _lstIcons = _iconListService.GetIcons().ToDictionary(x => x.Category, x => x.IconNames);
+        _lstIcons = IconListService.GetIcons().ToDictionary(x => x.Category, x => x.IconNames);
         base.OnInitialized();
     }
 
