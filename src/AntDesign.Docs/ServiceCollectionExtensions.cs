@@ -1,9 +1,12 @@
-﻿using System.Reflection;
+﻿using System.Net.Http;
+using System;
+using System.Reflection;
 using AntDesign.Docs.Highlight;
 using AntDesign.Docs.Services;
 using AntDesign.Extensions.Localization;
 using Microsoft.Extensions.DependencyInjection.Extensions;
 using Microsoft.Extensions.Localization;
+using Microsoft.AspNetCore.Http;
 
 namespace Microsoft.Extensions.DependencyInjection
 {
@@ -15,6 +18,7 @@ namespace Microsoft.Extensions.DependencyInjection
             services.AddScoped<DemoService>();
             services.AddScoped<IconListService>();
             services.AddScoped<IPrismHighlighter, PrismHighlighter>();
+            services.AddSingleton<AssemblyService>();
 
             services.AddSimpleEmbeddedJsonLocalization(options =>
             {
@@ -34,6 +38,23 @@ namespace Microsoft.Extensions.DependencyInjection
             //    b.UseEmbeddedJson(o => o.ResourcesPath = "Resources");
             //}, ServiceLifetime.Singleton);
             //services.AddLocalization(options => options.ResourcesPath = "Resources");
+
+            services.AddSingleton(sp =>
+            {
+                var httpContext = sp.GetService<IHttpContextAccessor>()?.HttpContext;
+                if (httpContext != null)
+                {
+                    var request = httpContext.Request;
+                    var host = request.Host.ToUriComponent();
+                    var scheme = request.Scheme;
+                    var baseAddress = $"{scheme}://{host}";
+                    return new HttpClient() { BaseAddress = new Uri(baseAddress) };
+                }
+                else
+                {
+                    return new HttpClient() { BaseAddress = new Uri("http://0.0.0.0:8181") };
+                }
+            });
 
             return services;
         }

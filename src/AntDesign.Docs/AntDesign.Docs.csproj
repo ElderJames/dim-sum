@@ -20,14 +20,14 @@
     <EmbeddedResource Include="Resources\*.json" />
   </ItemGroup>
 
+	<ItemGroup>
+		<FrameworkReference Include="Microsoft.AspNetCore.App" />
+	</ItemGroup>
+
   <ItemGroup>
     <Compile Include="..\Shared\DemoComponent.cs" Link="Services\DemoComponent.cs" />
     <Compile Include="..\Shared\DemoMenuItem.cs" Link="Services\DemoMenuItem.cs" />
     <Compile Include="..\Shared\DocsFile.cs" Link="Services\DocsFile.cs" />
-  </ItemGroup>
-
-  <ItemGroup>
-    <ProjectReference Include="..\AntDesign.Docs.Demos\AntDesign.Docs.Demos.csproj" />
   </ItemGroup>
 
   <ItemGroup>

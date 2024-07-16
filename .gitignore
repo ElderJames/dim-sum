@@ -362,3 +362,4 @@ MigrationBackup/
 # Fody - auto-generated XML schema
 FodyWeavers.xsd
 /src/AntDesign.Docs.Server/wwwroot/docs
+/src/AntDesign.Docs.Wasm/wwwroot/docs

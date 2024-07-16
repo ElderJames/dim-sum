@@ -2,6 +2,7 @@
 // The .NET Foundation licenses this file to you under the MIT license.
 // See the LICENSE file in the project root for more information.
 
+using AntDesign.Docs.Build.CLI.Utils;
 using Markdig;
 using Microsoft.CodeAnalysis;
 using Microsoft.CodeAnalysis.Text;
@@ -34,7 +35,7 @@ namespace AntDesign.Docs.Generator
 
         private static string GeneratorPages(string name, string locale, string text)
         {
-            var html = Markdown.ToHtml(text);
+            var doc = DocParser.ParseDocs(text);
             var template = """
                 using Microsoft.AspNetCore.Components;
                 using Microsoft.AspNetCore.Components.Rendering;
@@ -54,7 +55,7 @@ namespace AntDesign.Docs.Generator
                 
                 """;
 
-            return template.Replace("{{html}}", $"\"\"\"\r\n{html}\r\n\"\"\"")
+            return template.Replace("{{html}}", $"\"\"\"\r\n{doc.html}\r\n\"\"\"")
                 .Replace("{{url}}", $"/{locale}/{name}")
                 .Replace("{{className}}", $"{name}{locale}".ToPascalCase());
         }

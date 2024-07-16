@@ -13,7 +13,13 @@
 	<IncludeBuildOutput>false</IncludeBuildOutput>  <!-- Do not include the generator as a lib dependency -->
 	<NoWarn>$(NoWarn);RS2008</NoWarn>
   </PropertyGroup>
-
+	
+  <ItemGroup>
+  	<Compile Include="..\Shared\DemoComponent.cs" Link="Shared\DemoComponent.cs" />
+  	<Compile Include="..\Shared\DemoMenuItem.cs" Link="Shared\DemoMenuItem.cs" />
+  	<Compile Include="..\Shared\DocsFile.cs" Link="Shared\DocsFile.cs" />
+  </ItemGroup>
+	
   <ItemGroup>
     <PackageReference Include="Microsoft.CodeAnalysis.Analyzers" Version="3.3.4">
   	  <PrivateAssets>all</PrivateAssets>
@@ -26,7 +32,9 @@
 
   <ItemGroup>
   	<PackageReference Include="Markdig" Version="0.37.0" PrivateAssets="all" GeneratePathProperty="true" />
+	<PackageReference Include="YamlDotNet" Version="16.0.0" PrivateAssets="all" GeneratePathProperty="true" />
   	<None Include="$(PkgMarkdig)\lib\netstandard2.0\*.dll" Pack="true" PackagePath="analyzers/dotnet/cs" Visible="false" />
+    <None Include="$(PkgYamlDotNet)\lib\netstandard2.0\*.dll" Pack="true" PackagePath="analyzers/dotnet/cs" Visible="false" />
   </ItemGroup>
   
   <!-- https://github.com/dotnet/roslyn/discussions/47517-->
@@ -37,6 +45,7 @@
   <Target Name="GetDependencyTargetPaths">
   	<ItemGroup>
   	  <TargetPathWithTargetPlatformMoniker Include="$(PKGMarkdig)\lib\netstandard2.0\Markdig.dll" IncludeRuntimeDependency="false" />
+	  <TargetPathWithTargetPlatformMoniker Include="$(PKGYamlDotNet)\lib\netstandard2.0\YamlDotNet.dll" IncludeRuntimeDependency="false" />
   	</ItemGroup>
   </Target>
 
