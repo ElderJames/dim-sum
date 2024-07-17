@@ -2,7 +2,7 @@
 // The .NET Foundation licenses this file to you under the MIT license.
 // See the LICENSE file in the project root for more information.
 
-using AntDesign.Docs.Build.CLI.Utils;
+using AntDesign.Docs.Generator.Utils;
 using Markdig;
 using Microsoft.CodeAnalysis;
 using Microsoft.CodeAnalysis.Text;
@@ -10,8 +10,8 @@ using System.Text;
 
 namespace AntDesign.Docs.Generator
 {
-    [Generator]
-    public class Generator : IIncrementalGenerator
+    //[Generator]
+    public class DocsGenerator : IIncrementalGenerator
     {
         public void Initialize(IncrementalGeneratorInitializationContext context)
         {

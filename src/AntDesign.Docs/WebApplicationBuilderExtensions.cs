@@ -1,8 +1,10 @@
 ﻿using AntDesign.Docs.Services;
+using Microsoft.AspNetCore.Components.Web;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
 using System;
 using System.Collections.Generic;
+using System.Diagnostics.Metrics;
 using System.Linq;
 using System.Reflection;
 using System.Text;
@@ -12,17 +14,18 @@ namespace Microsoft.AspNetCore.Builder
 {
     public static class WebApplicationBuilderExtensions
     {
-        public static void RunBlazorSite(this WebApplicationBuilder builder)
+        public static void RunBlazorSite(this WebApplicationBuilder builder, Action<IJSComponentConfiguration> action)
         {
-
             // Add services to the container.
             builder.Services.AddRazorComponents()
-                .AddInteractiveServerComponents();
+                .AddInteractiveServerComponents(options =>
+                {
+                    action.Invoke(options.RootComponents);
+                });
 
             builder.Services.AddAntDesignDocs();
 
             var app = builder.Build();
-
 
             app.Services.GetRequiredService<AssemblyService>().AddAssembly(Assembly.GetEntryAssembly());
 
@@ -43,9 +46,7 @@ namespace Microsoft.AspNetCore.Builder
                 .AddAdditionalAssemblies(Assembly.GetEntryAssembly())
                 .AddInteractiveServerRenderMode();
 
-
             app.Run();
-
         }
     }
 }

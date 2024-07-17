@@ -7,7 +7,7 @@
     <Nullable>enable</Nullable>
     <!--<EmitCompilerGeneratedFiles>true</EmitCompilerGeneratedFiles>
     <CompilerGeneratedFilesOutputPath>Generated</CompilerGeneratedFilesOutputPath>-->
-    <!--<EnforceExtendedAnalyzerRules>true</EnforceExtendedAnalyzerRules>-->
+    <EnforceExtendedAnalyzerRules>true</EnforceExtendedAnalyzerRules>
 	<IsRoslynComponent>true</IsRoslynComponent>
 	<GeneratePackageOnBuild>true</GeneratePackageOnBuild> <!-- Generates a package at build -->
 	<IncludeBuildOutput>false</IncludeBuildOutput>  <!-- Do not include the generator as a lib dependency -->

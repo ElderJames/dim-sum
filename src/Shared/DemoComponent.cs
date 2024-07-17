@@ -1,4 +1,5 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 
 namespace AntDesign.Docs
 {
@@ -34,7 +35,9 @@ namespace AntDesign.Docs
 
         public string Code { get; set; }
 
-        public string Type { get; set; }
+        public Type Type { get; set; }
+
+        public string TypeName { get; set; }
 
         public string Style { get; set; }
 

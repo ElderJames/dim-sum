@@ -7,7 +7,7 @@ namespace AntDesign.Docs.Build.CLI.Utils
 {
     public class MenuComparer : IComparer<string>
     {
-        public int Compare([AllowNull] string x, [AllowNull] string y)
+        public int Compare(string x, string y)
         {
             if (x == null)
                 return 1;

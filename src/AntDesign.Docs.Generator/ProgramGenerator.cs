@@ -7,15 +7,19 @@ using System.Text;
 namespace AntDesign.Docs.Generator
 {
     [Generator]
-  public  class ProgramGenerator : IIncrementalGenerator
+    public class ProgramGenerator : IIncrementalGenerator
     {
 
         private string Template = """
+            namespace SiteGenerator.Sample;
             public class Program
             {
                 private static void Main(string[] args)
                 {
-                    WebApplication.CreateBuilder(args).RunBlazorSite();
+                    WebApplication.CreateBuilder(args).RunBlazorSite(options =>
+                    {
+                        options.RegisterCustomElements();
+                    });
                 }
             }
             """;
@@ -25,6 +29,8 @@ namespace AntDesign.Docs.Generator
             context.RegisterPostInitializationOutput(ctx => ctx.AddSource(
                "Program.g.cs",
                SourceText.From(Template, Encoding.UTF8)));
+
+
         }
     }
 }

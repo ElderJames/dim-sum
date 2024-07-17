@@ -6,7 +6,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace AntDesign.Docs.Demos.Pages;
+namespace SiteGenerator.Sample;
 
 [Route("/docs/page")]
 public class PageComponent : ComponentBase

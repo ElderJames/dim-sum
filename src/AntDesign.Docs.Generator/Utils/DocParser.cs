@@ -8,7 +8,7 @@ using Markdig.Syntax;
 using YamlDotNet.Serialization;
 using YamlDotNet.Serialization.NamingConventions;
 
-namespace AntDesign.Docs.Build.CLI.Utils
+namespace AntDesign.Docs.Generator.Utils
 {
     public class DocParser
     {

@@ -1,9 +1,11 @@
-﻿using System;
+﻿using Microsoft.CodeAnalysis.CSharp.Syntax;
+using Microsoft.CodeAnalysis;
+using System;
 using System.Collections.Generic;
 using System.IO;
 using System.Text;
 
-namespace AntDesign.Docs.Generator
+namespace AntDesign.Docs.Generator.Utils
 {
     public static class StringExtensions
     {
@@ -12,5 +14,6 @@ namespace AntDesign.Docs.Generator
 
             return string.Join("", str.Split('-').Select(static str => str[0].ToString().ToUpper() + str.Substring(1)));
         }
+
     }
 }
