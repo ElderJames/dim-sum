@@ -25,7 +25,7 @@ namespace AntDesign.Docs
 
     public class DemoItem
     {
-        public decimal Order { get; set; }
+        public double Order { get; set; }
 
         public string Name { get; set; }
 

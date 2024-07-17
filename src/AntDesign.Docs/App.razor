@@ -41,27 +41,7 @@
     <script src="_content/AntDesign.Docs/js/docsearch.js"></script>
 
     <script antblazor-js></script>
-    @* <script src="/blazor.web.js" autostart="false"></script> *@
-    <script src="/blazor.web.patched.js" autostart="false"></script>
-    <script>
-        Blazor.start({
-            webAssembly: {
-                loadBootResource: function (type, name, defaultUri, integrity) {
-                    if (type === 'dotnetjs' && name === 'dotnet.js') {
-                        return '/dotnet.patched.js';
-                    }
-                    return `_framework/${name}`;
-                },
-                configureRuntime: (builder) => {
-
-                    builder.withConfig({
-                        maxParallelDownloads: 2, // Adjust this to change the WebAssembly resource throttling amount
-                    });
-
-                },
-            },
-        });
-    </script>
+    <script src="_framework/blazor.server.js"></script>
 </body>
 
 </html>

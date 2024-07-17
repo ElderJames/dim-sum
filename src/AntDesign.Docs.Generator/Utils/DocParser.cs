@@ -198,7 +198,7 @@ namespace AntDesign.Docs.Generator.Utils
 
     public class DescriptionYaml
     {
-        public decimal Order { get; set; }
+        public double Order { get; set; }
 
         public int? Iframe { get; set; }
 

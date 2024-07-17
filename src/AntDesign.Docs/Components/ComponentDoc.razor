@@ -1,38 +1,27 @@
-﻿@* @page "/components/{name}"
-@page "/components"
-@page "/charts/{name}"
-@page "/charts"
-@page "/experimental/{name}"
-@page "/experimental"
+﻿@namespace AntDesign.Docs.Components
 
-@page "/{locale}/components"
-@page "/{locale}/components/{name}"
-@page "/{locale}/charts/{name}"
-@page "/{locale}/charts"
-@page "/{locale}/experimental/{name}"
-@page "/{locale}/experimental" *@
 <section class="main-container main-container-component">
     <article>
 
-        @if (_demoComponent != null)
+        @if (DemoComponent != null)
         {
-            var title = $"{_demoComponent.SubTitle} {_demoComponent.Title} - Ant Design Blazor".Trim();
+            var title = $"{DemoComponent.SubTitle} {DemoComponent.Title} - Ant Design Blazor".Trim();
             <PageTitle>@title</PageTitle>
-            var docDemos = _demoComponent.DemoList?.Where(x => x.Docs.HasValue && x.Docs.Value) ?? Enumerable.Empty<DemoItem>();
-            var demos = _demoComponent.DemoList?.Where(x => !x.Debug && !x.Docs.HasValue).OrderBy(x => x.Order) ?? Enumerable.Empty<DemoItem>();
+            var docDemos = DemoComponent.DemoList?.Where(x => x.Docs.HasValue && x.Docs.Value) ?? Enumerable.Empty<DemoItem>();
+            var demos = DemoComponent.DemoList?.Where(x => !x.Debug && !x.Docs.HasValue).OrderBy(x => x.Order) ?? Enumerable.Empty<DemoItem>();
 
             if (demos.Any())
             {
                 <div class="toc-affix">
                     <Affix OffsetTop="16">
-                        <Anchor Key="@_demoComponent.Title">
+                        <Anchor Key="@DemoComponent.Title">
                             @foreach (var demo in demos)
                             {
-                                <AnchorLink Href="@($"/{CurrentLanguage}/components/{_demoComponent.Title}#components-{_demoComponent.Title.ToLower()}-demo-{demo.Name}")" Title="@demo.Title" />
+                                <AnchorLink Href="@($"/{CurrentLanguage}/components/{DemoComponent.Title}#components-{DemoComponent.Title.ToLower()}-demo-{demo.Name}")" Title="@demo.Title" />
                             }
-                            @if (!string.IsNullOrEmpty(_demoComponent.ApiDoc))
+                            @if (!string.IsNullOrEmpty(DemoComponent.ApiDoc))
                             {
-                                <AnchorLink Href="@($"/{CurrentLanguage}/components/{_demoComponent.Title}#API")" Title="API" />
+                                <AnchorLink Href="@($"/{CurrentLanguage}/components/{DemoComponent.Title}#API")" Title="API" />
                             }
                         </Anchor>
                     </Affix>
@@ -41,8 +30,8 @@
 
             <section class="markdown">
                 <h1>
-                    @_demoComponent.Title
-                    <span class="subtitle">@_demoComponent.SubTitle</span>
+                    @DemoComponent.Title
+                    <span class="subtitle">@DemoComponent.SubTitle</span>
                     <span class="widget"></span>
                     <Tooltip Title="@Localizer["app.content.edit-demo"]">
                         <Unbound>
@@ -53,14 +42,14 @@
                     </Tooltip>
                 </h1>
                 <section class="markdown">
-                    @((MarkupString)_demoComponent.Desc)
+                    @((MarkupString)DemoComponent.Desc)
                 </section>
 
                 @if (_rendered)
                 {
                     @foreach (var docDemo in docDemos)
                     {
-                        <RazorBox Demo="@docDemo" @key="@($"{_demoComponent.Title}-{docDemo.Type}")" />
+                        <RazorBox Demo="@docDemo" @key="@($"{DemoComponent.Title}-{docDemo.Type}")" />
                     }
                 }
                 else
@@ -72,7 +61,7 @@
                     <h2 data-scrollama-index="1">
                         @Localizer["app.component.examples"]
                         <span class="all-code-box-controls">
-                            @if (_demoComponent.Cols != 1)
+                            @if (DemoComponent.Cols != 1)
                             {
                                 @if (_expanded)
                                 {
@@ -93,12 +82,12 @@
             @if (demos.Any())
             {
                 <Row Style="margin-left: -8px; margin-right: -8px;">
-                    @if (_demoComponent.Cols == 1 || _expanded)
+                    @if (DemoComponent.Cols == 1 || _expanded)
                     {
                         foreach (var demo in demos)
                         {
                             <AntDesign.Col Span="24" Class="code-boxes-col-1-1" Style="padding-left: 8px; padding-right: 8px;">
-                                <CodeBox CodeExpand="_expandAllCode" Demo="demo" @key="demo.Type" ComponentName="@_demoComponent.Title"></CodeBox>
+                                <CodeBox CodeExpand="_expandAllCode" Demo="demo" @key="demo.TypeName" ComponentName="@DemoComponent.Title"></CodeBox>
                             </AntDesign.Col>
                         }
                     }
@@ -110,13 +99,13 @@
                         <AntDesign.Col Span="12" Class="code-boxes-col-2-1" Style="padding-left: 8px; padding-right: 8px;">
                             @foreach (var demo in leftList)
                             {
-                                <CodeBox CodeExpand="_expandAllCode" Demo="demo" @key="demo.Type" ComponentName="@_demoComponent.Title"></CodeBox>
+                                <CodeBox CodeExpand="_expandAllCode" Demo="demo" @key="demo.TypeName" ComponentName="@DemoComponent.Title"></CodeBox>
                             }
                         </AntDesign.Col>
                         <AntDesign.Col Span="12" Class="code-boxes-col-2-1" Style="padding-left: 8px; padding-right: 8px;">
                             @foreach (var demo in rightList)
                             {
-                                <CodeBox CodeExpand="_expandAllCode" Demo="demo" @key="demo.Type" ComponentName="@_demoComponent.Title"></CodeBox>
+                                <CodeBox CodeExpand="_expandAllCode" Demo="demo" @key="demo.TypeName" ComponentName="@DemoComponent.Title"></CodeBox>
                             }
                         </AntDesign.Col>
                     }
@@ -124,7 +113,7 @@
             }
            
             <section class="markdown api-container">
-                @((MarkupString)_demoComponent.ApiDoc)
+                @((MarkupString)DemoComponent.ApiDoc)
             </section>
         }
         else

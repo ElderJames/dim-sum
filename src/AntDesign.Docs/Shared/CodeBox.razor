@@ -86,7 +86,7 @@
 
     protected string DemoId => $"components-{ComponentName.ToLower()}-demo-{Demo.Name}";
 
-    private string EditUrl => $"https://github.com/ant-design-blazor/ant-design-blazor/edit/master/site/AntDesign.Docs/{Demo.Type.FullName.Replace(".", "/")}.razor";
+    private string EditUrl => $"https://github.com/ant-design-blazor/ant-design-blazor/edit/master/site/AntDesign.Docs/{Demo.TypeName.Replace(".", "/")}.razor";
 
     protected override async Task OnInitializedAsync()
     {

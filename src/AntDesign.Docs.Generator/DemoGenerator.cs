@@ -17,10 +17,10 @@ namespace AntDesign.Docs.Generator
         {
             var files = context.AdditionalTextsProvider
                 .Where(static (text) => text.Path.Contains("\\Demos\\"))
-                .Select(static (text,token)=> (file:text, content: text.GetText(token)!.ToString()))
+                .Select(static (text, token) => (file: text, content: text.GetText(token)!.ToString()))
                 .Collect();
 
-          var compilationAndFiles=  context.CompilationProvider.Combine(files);
+            var compilationAndFiles = context.CompilationProvider.Combine(files);
 
             context.RegisterSourceOutput(compilationAndFiles, static (ctx, pair) =>
             {
@@ -82,16 +82,18 @@ namespace AntDesign.Docs.Generator
                 }
                 foreach (var componentPair in components)
                 {
-                    foreach(var component in componentPair.Value)
+                    foreach (var component in componentPair.Value)
                     {
                         var className = $"{component.Key}{componentPair.Key}".Replace("/", "_").Replace("-", "_");
-                        var source = SourceCodeGenerator.GenerateSourceCode(component.Value, className);
+                        var source = SourceCodeGenerator.GenerateSourceCode(component.Value, compilation.AssemblyName, className);
                         ctx.AddSource($"{className}.g.cs", SourceText.From(source, Encoding.UTF8));
+
+                        var pageSource = GetComponentCode(compilation.AssemblyName, $"/{component.Key}/{componentPair.Key}", className);
+                        ctx.AddSource($"{className}.page.g.cs", SourceText.From(pageSource, Encoding.UTF8));
                     }
                 }
             });
         }
-
 
         private static string GetDemoName(string filePath)
         {
@@ -101,12 +103,41 @@ namespace AntDesign.Docs.Generator
         {
             var parts = filePath.Split('\\');
             var demoIndex = Array.IndexOf(parts, "Demos");
-            return $"/{parts[demoIndex + 1]}/{parts[demoIndex + 2]}";
+            return $"{parts[demoIndex + 1]}/{parts[demoIndex + 2]}";
         }
 
         private static string GetLocale(string filePath)
         {
-            return filePath.Split('\\').Last().Replace("index.","").Replace(".md","");
+            return filePath.Split('\\').Last().Replace("index.", "").Replace(".md", "");
+        }
+
+        private static string GetComponentCode(string nameSpace, string path, string demoComponentName)
+        {
+            var template = """
+                using AntDesign.Docs.Components;
+                using Microsoft.AspNetCore.Components;
+                using Microsoft.AspNetCore.Components.Rendering;
+
+                namespace {{namespace}};
+
+                [Route("{{path}}")]
+                public class {{className}}Component : ComponentBase
+                {
+                    protected override void BuildRenderTree(RenderTreeBuilder builder)
+                    {
+                        builder.OpenComponent<ComponentDoc>(0);
+
+                        builder.AddAttribute(1, nameof(ComponentDoc.DemoComponent), {{demoComponentName}}.Data);
+
+                        builder.CloseComponent();
+                    }
+                }
+                """;
+
+            return template.Replace("{{namespace}}", nameSpace)
+                .Replace("{{path}}", path)
+                .Replace("{{className}}", demoComponentName)
+                .Replace("{{demoComponentName}}", demoComponentName);
         }
     }
 }
