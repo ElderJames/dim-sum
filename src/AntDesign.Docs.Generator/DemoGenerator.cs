@@ -80,16 +80,23 @@ namespace AntDesign.Docs.Generator
                         });
                     }
                 }
-
-                ctx.AddSource("", SourceText.From("", Encoding.UTF8));
+                foreach (var componentPair in components)
+                {
+                    foreach(var component in componentPair.Value)
+                    {
+                        var className = $"{component.Key}{componentPair.Key}".Replace("/", "_").Replace("-", "_");
+                        var source = SourceCodeGenerator.GenerateSourceCode(component.Value, className);
+                        ctx.AddSource($"{className}.g.cs", SourceText.From(source, Encoding.UTF8));
+                    }
+                }
             });
         }
+
 
         private static string GetDemoName(string filePath)
         {
             return filePath.ToLowerInvariant().Replace(".md", "").Replace(".razor", "").Replace("Demo", "").Replace("_", "");
         }
-
         private static string GetComponentName(string filePath)
         {
             var parts = filePath.Split('\\');

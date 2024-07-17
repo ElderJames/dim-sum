@@ -4,7 +4,7 @@ using Microsoft.AspNetCore.Components;
 using Microsoft.AspNetCore.Components.Rendering;
 
 namespace SiteGenerator.Sample.Pages;
-public class DemoComponent:ComponentBase
+public class DemoComponent : ComponentBase
 {
     private static DemoItem demo = new()
     {
