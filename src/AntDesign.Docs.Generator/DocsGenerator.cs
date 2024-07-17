@@ -16,7 +16,7 @@ namespace AntDesign.Docs.Generator
         public void Initialize(IncrementalGeneratorInitializationContext context)
         {
             var pipeline = context.AdditionalTextsProvider
-                .Where(static (text) => text.Path.Contains("/docs/") && text.Path.EndsWith(".md"))
+                .Where(static (text) => text.Path.Contains("\\docs\\") && text.Path.EndsWith(".md"))
                 .Select(static (text, cancellationToken) =>
                 {
                     var fileNameParts = Path.GetFileNameWithoutExtension(text.Path).Split('.');

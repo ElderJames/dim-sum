@@ -20,19 +20,4 @@
 		<ProjectReference Include="..\AntDesign.Docs\AntDesign.Docs.csproj" />
 	</ItemGroup>
 
-	<ItemGroup>
-		<Compile Update="Resources\App.Designer.cs">
-			<DependentUpon>App.resx</DependentUpon>
-			<DesignTime>True</DesignTime>
-			<AutoGen>True</AutoGen>
-		</Compile>
-	</ItemGroup>
-
-	<ItemGroup>
-		<EmbeddedResource Update="Resources\App.resx">
-			<LastGenOutput>App.Designer.cs</LastGenOutput>
-			<Generator>PublicResXFileCodeGenerator</Generator>
-		</EmbeddedResource>
-	</ItemGroup>
-
 </Project>
