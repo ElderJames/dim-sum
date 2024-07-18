@@ -80,13 +80,13 @@ namespace AntDesign.Docs.Pages
 
         protected override async Task OnParametersSetAsync()
         {
-            await SetDocUrl();
+           // await SetDocUrl();
             await base.OnParametersSetAsync();
         }
 
         private async void OnLocationChanged(object sender, LocationChangedEventArgs args)
         {
-            await SetDocUrl();
+            //await SetDocUrl();
             await InvokeAsync(StateHasChanged);
         }
 

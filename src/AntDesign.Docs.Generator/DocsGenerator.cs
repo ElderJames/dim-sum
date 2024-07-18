@@ -56,7 +56,7 @@ namespace AntDesign.Docs.Generator
                 """;
 
             return template.Replace("{{html}}", $"\"\"\"\r\n{doc.html}\r\n\"\"\"")
-                .Replace("{{url}}", $"/{locale}/{name}")
+                .Replace("{{url}}", $"/{locale}/docs/{name}")
                 .Replace("{{className}}", $"{name}{locale}".ToPascalCase());
         }
     }

@@ -113,24 +113,28 @@ namespace AntDesign.Docs.Generator
                     .ToDictionary(x => x.Key, x =>
                     {
                         return x.GroupBy(o => o.Item2.Category)
-                            .ToDictionary(k => k.Key, 
+                            .ToDictionary(k => k.Key,
                                 k => k
                                 .GroupBy(j => j.Item2.Type)
                                 .Select(j =>
                                 {
+                                    var children = j.Select(o => new DemoMenuItem()
+                                    {
+                                        Order = Array.IndexOf(_demoCategoryMap.Select(x => x.Key).ToArray(), o.Item2.Category) + 1,
+                                        Title = o.Item2.Title,
+                                        SubTitle = o.Item2.SubTitle,
+                                        Url = $"/{x.Key}/{o.Item2.Category}/{o.Item2.Title.ToLowerInvariant()}",
+                                        Type = "menuItem",
+                                        Cover = o.Item2.Cover,
+                                    }).OrderBy(x => x.Order).ToArray();
+
                                     return new DemoMenuItem()
                                     {
                                         Order = _sortMap[j.Key],
                                         Title = j.Key,
                                         Type = "itemGroup",
-                                        Children = j.Select(o => new DemoMenuItem()
-                                        {
-                                            Title = o.Item2.Title,
-                                            SubTitle = o.Item2.SubTitle,
-                                            Url = $"{o.Item2.Category}/{o.Item2.Title.ToLowerInvariant()}",
-                                            Type = "menuItem",
-                                            Cover = o.Item2.Cover,
-                                        }).ToArray()
+                                        Url = children[0].Url,
+                                        Children = children
                                     };
                                 }).ToArray()
                             );
@@ -147,7 +151,7 @@ namespace AntDesign.Docs.Generator
                         Order = 0,
                         Title = lang == "zh-CN" ? "文档" : "Docs",
                         Type = "subMenu",
-                        Url = "docs",
+                        Url = children[0].Url,
                         Children = children
                     });
 
@@ -159,13 +163,15 @@ namespace AntDesign.Docs.Generator
                         {
                             continue;
                         }
+                        var componentChildren = component.Value.OrderBy(x => x.Order).ToArray();
+
                         menu.Add(new DemoMenuItem()
                         {
                             Order = Array.IndexOf(_demoCategoryMap.Select(x => x.Key).ToArray(), component.Key) + 1,
                             Title = lang == "zh-CN" ? _demoCategoryMap[component.Key] : component.Key,
                             Type = "subMenu",
-                            Url = component.Key.ToLowerInvariant(),
-                            Children = component.Value.OrderBy(x => x.Order).ToArray()
+                            Url = $"{componentChildren[0].Url}",
+                            Children = componentChildren
                         });
                     }
 

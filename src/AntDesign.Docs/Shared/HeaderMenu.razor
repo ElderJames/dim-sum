@@ -6,7 +6,7 @@
 <Menu Mode="@(IsMobile?MenuMode.Inline: MenuMode.Horizontal)" Id="nav" Class="menu-site">
     @foreach (var item in _menuItems.OrderBy(x => x.Order))
     {
-        <MenuItem Class="ant-menu-item-only-child" Key="@item.Url" RouterLink="@($"{CurrentLanguage}/{item.Url}")" RouterMatch="NavLinkMatch.Prefix">
+        <MenuItem Class="ant-menu-item-only-child" Key="@item.Url" RouterLink="@($"{item.Url}")" RouterMatch="NavLinkMatch.Prefix">
             <span>@item.Title</span>
         </MenuItem>
     }

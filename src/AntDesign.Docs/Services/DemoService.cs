@@ -99,7 +99,7 @@ namespace AntDesign.Docs.Services
         {
             var menuItems = await GetMenuAsync();
             var currentSubmenuUrl = GetCurrentSubMenuUrl();
-            return menuItems.FirstOrDefault(x => x.Url == currentSubmenuUrl)?.Children ?? Array.Empty<DemoMenuItem>();
+            return menuItems.FirstOrDefault(x => x.Url.Contains(currentSubmenuUrl))?.Children ?? Array.Empty<DemoMenuItem>();
         }
 
         public string GetCurrentSubMenuUrl()
