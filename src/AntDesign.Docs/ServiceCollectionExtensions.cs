@@ -16,7 +16,7 @@ namespace Microsoft.Extensions.DependencyInjection
         {
             services.AddAntDesign();
             services.AddScoped<DemoService>();
-            services.AddScoped<IPrismHighlighter, PrismHighlighter>();
+            //services.AddScoped<IPrismHighlighter, PrismHighlighter>();
             services.AddSingleton<AssemblyService>();
 
             services.AddSimpleEmbeddedJsonLocalization(options =>

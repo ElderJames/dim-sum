@@ -14,8 +14,9 @@
 
     <link rel="stylesheet" href="app.css" />
     <link rel="stylesheet" href="AntDesign.Docs.WebApp.styles.css" />
+    <link no-antblazor-css />
     <StyleOutlet @rendermode="InteractiveServer" />
-    <HeadOutlet @rendermode="InteractiveServer" />
+    @* <HeadOutlet @rendermode="InteractiveServer" /> *@
 </head>
 
 <body>
@@ -27,16 +28,6 @@
     <script src="_content/AntDesign.Charts/ant-design-charts-blazor.js"></script>
     @* <script src="_content/AntDesign/js/ant-design-blazor.js"></script> *@
     <script src="_content/AntDesign.Docs/js/prism.js"></script>
-    <script>
-        window.XPrism = {};
-        window.XPrism.highlight = function (code, language) {
-            return Prism.highlight(code, Prism.languages[language], language);
-        }
-
-        window.XPrism.highlightAll = function () {
-            Prism.highlightAll();
-        }
-    </script>
     <script src="@("https://fastly.jsdelivr.net/npm/@docsearch/js@3")"></script>
     <script src="_content/AntDesign.Docs/js/docsearch.js"></script>
 

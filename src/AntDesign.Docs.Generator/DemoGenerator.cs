@@ -3,6 +3,7 @@
 // See the LICENSE file in the project root for more information.
 
 using AntDesign.Docs.Generator.Utils;
+using ColorCode;
 using Markdig;
 using Microsoft.CodeAnalysis;
 using Microsoft.CodeAnalysis.Text;
@@ -70,7 +71,7 @@ namespace AntDesign.Docs.Generator
                             Order = descriptionContent.Meta.Order,
                             Iframe = descriptionContent.Meta.Iframe,
                             Link = descriptionContent.Meta.Link,
-                            Code = razor.content,
+                            Code = ParseCode(razor.content),
                             Description = descriptionContent.Descriptions[title.Key],
                             Name = md.file.Path.Split('\\').Last().Replace(".md", ""),
                             Style = descriptionContent.Style,
@@ -138,6 +139,27 @@ namespace AntDesign.Docs.Generator
                 .Replace("{{path}}", path)
                 .Replace("{{className}}", demoComponentName)
                 .Replace("{{demoComponentName}}", demoComponentName);
+        }
+    
+        private static string ParseCode(string code)
+        {
+            var formatter = new HtmlFormatter();
+
+            var csharpIndex = code.IndexOf("@code");
+
+            if (csharpIndex > 0)
+            {
+                var htmlPart = code.Substring(0, csharpIndex);
+                var csharpPart = code.Substring(csharpIndex);
+
+                return $@"""
+                {formatter.GetHtmlString(htmlPart, Languages.Html)}
+
+                {formatter.GetHtmlString(csharpPart, Languages.CSharp)}
+                """;
+            }
+       
+            return formatter.GetHtmlString(code, Languages.Html);
         }
     }
 }

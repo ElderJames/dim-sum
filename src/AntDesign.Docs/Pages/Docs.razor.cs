@@ -39,7 +39,7 @@ namespace AntDesign.Docs.Pages
         [Inject] private ILocalizationService LocalizationService { get; set; }
         [Inject] private IStringLocalizer Localizer { get; set; }
         [Inject] private DemoService DemoService { get; set; }
-        [Inject] private IPrismHighlighter PrismHighlighter { get; set; }
+        //[Inject] private IPrismHighlighter PrismHighlighter { get; set; }
         [Inject] private HttpClient HttpClient { get; set; }
 
         protected override async Task OnInitializedAsync()
@@ -95,7 +95,7 @@ namespace AntDesign.Docs.Pages
             if (_waitingHighlight)
             {
                 _waitingHighlight = false;
-                await PrismHighlighter.HighlightAllAsync();
+                //await PrismHighlighter.HighlightAllAsync();
             }
         }
 
