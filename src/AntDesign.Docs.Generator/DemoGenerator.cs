@@ -10,7 +10,7 @@ using System.Text;
 
 namespace AntDesign.Docs.Generator
 {
-   // [Generator]
+    [Generator]
     public class DemoGenerator : IIncrementalGenerator
     {
         public void Initialize(IncrementalGeneratorInitializationContext context)
@@ -97,7 +97,7 @@ namespace AntDesign.Docs.Generator
 
         private static string GetDemoName(string filePath)
         {
-            return filePath.ToLowerInvariant().Replace(".md", "").Replace(".razor", "").Replace("Demo", "").Replace("_", "");
+            return filePath.ToLowerInvariant().Replace(".md", "").Replace(".razor", "").Replace("Demo", "").Replace("_", "").Replace("-", "");
         }
         private static string GetComponentName(string filePath)
         {

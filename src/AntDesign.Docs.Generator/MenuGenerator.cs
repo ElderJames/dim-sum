@@ -127,7 +127,7 @@ namespace AntDesign.Docs.Generator
                                         {
                                             Title = o.Item2.Title,
                                             SubTitle = o.Item2.SubTitle,
-                                            //Url = $"{directory.Name.ToLowerInvariant()}/{x.Value.Title.ToLower()}",
+                                            Url = $"{o.Item2.Category}/{o.Item2.Title.ToLowerInvariant()}",
                                             Type = "menuItem",
                                             Cover = o.Item2.Cover,
                                         }).ToArray()
