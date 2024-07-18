@@ -10,7 +10,7 @@ using System.Text;
 
 namespace AntDesign.Docs.Generator
 {
-    [Generator]
+   // [Generator]
     public class DemoGenerator : IIncrementalGenerator
     {
         public void Initialize(IncrementalGeneratorInitializationContext context)

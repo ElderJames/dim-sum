@@ -19,8 +19,10 @@ public class SourceCodeGenerator
     private static string GeneratePropertyCode(object obj, string propertyName)
     {
         StringBuilder propertyCode = new StringBuilder();
-        propertyCode.AppendLine($"    public static {obj.GetType().FullName} {propertyName}");
+        var isEnumerableType = typeof(IEnumerable).IsAssignableFrom(obj.GetType()) && obj.GetType() != typeof(string);
+        var propertyTypeName = isEnumerableType ? GetGenericTypeName(obj.GetType()) : obj.GetType().FullName;
 
+        propertyCode.AppendLine($"    public static {propertyTypeName} {propertyName}");
         propertyCode.AppendLine("    {");
         propertyCode.AppendLine("        get");
         propertyCode.AppendLine("        {");
@@ -28,6 +30,19 @@ public class SourceCodeGenerator
         if (obj.GetType().IsPrimitive || obj is string)
         {
             propertyCode.AppendLine($"            return {GetValueCode(obj)};");
+        }
+        else if (isEnumerableType)
+        {
+            propertyCode.AppendLine($"           return new {GetGenericTypeName(obj.GetType())}");
+            propertyCode.AppendLine("                {");
+
+            IEnumerable list = (IEnumerable)obj;
+            foreach (var item in list)
+            {
+                propertyCode.AppendLine($"                    {GetValueCode(item)},");
+            }
+
+            propertyCode.AppendLine("                };");
         }
         else
         {

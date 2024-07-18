@@ -3,6 +3,8 @@ using Microsoft.CodeAnalysis;
 using Microsoft.CodeAnalysis.Text;
 using System;
 using System.Collections.Generic;
+using System.ComponentModel;
+using System.Linq;
 using System.Text;
 
 namespace AntDesign.Docs.Generator
@@ -47,7 +49,7 @@ namespace AntDesign.Docs.Generator
         public void Initialize(IncrementalGeneratorInitializationContext context)
         {
             var files = context.AdditionalTextsProvider
-                .Where(static (text) => text.Path.Contains("\\Demos\\")&& text.Path.Contains("index.")&&text.Path.EndsWith(".md"))
+                .Where(static (text) => text.Path.Contains("\\Demos\\") && text.Path.Contains("index.") && text.Path.EndsWith(".md"))
                 .Select(static (text, token) => (file: text, content: text.GetText(token)!.ToString()))
                 .Collect();
 
@@ -65,18 +67,36 @@ namespace AntDesign.Docs.Generator
                 var componentFiles = pair.Left.Left;
                 var docFiles = pair.Left.Right;
                 var assembly = pair.Right;
-                IList<Dictionary<string, DemoMenuItem>> docsMenuList = [];
-                var componentDocs = componentFiles.Where(x => x.file.Path.Contains("doc")).GroupBy(static x => GetComponentName(x.file.Path))
-                    .Where(x => x.Count() == 2).SelectMany(x => x).GroupBy(o => GetLocale(o.file.Path))
-                    .ToDictionary(o => o.Key, o =>
+                IList<(string, DemoMenuItem)> docsMenuList = [];
+                foreach (var doc in docFiles.GroupBy(static x => x.file.Path.Split('\\').Last().Split('.')[1]))
+                {
+                    foreach (var item in doc)
                     {
-                        var language = o.Key;
+                        Dictionary<string, string> docData = DocParser.ParseHeader(item.content);
+                        docsMenuList.Add((doc.Key, new DemoMenuItem()
+                        {
+                            Order = float.TryParse(docData["order"], out var order) ? order : 0,
+                            Title = docData["title"],
+                            Url = $"/{doc.Key}/docs/{item.file.Path.Split('\\').Last().Split('.')[0]}",
+                            Type = "menuItem"
+                        }));
+                    }
+                }
 
+                var docsMenuI18N = docsMenuList
+                    .GroupBy(x => x.Item1)
+                    .ToDictionary(x => x.Key, x => x.Select(x => x.Item2));
+
+                var componentDocs = componentFiles.Where(x => x.file.Path.Contains("doc")).GroupBy(static x => GetComponentName(x.file.Path))
+                    .Where(x => x.Count() == 2)
+                    .SelectMany(o =>
+                    {
                         return o.Select(x =>
                         {
+                            var language = GetLocale(x.file.Path);
                             (Dictionary<string, string> Meta, string desc, string apiDoc) docData = DocParser.ParseDemoDoc(x.content);
 
-                            return new DemoComponent
+                            return (language, new DemoComponent
                             {
                                 Category = docData.Meta["category"],
                                 Title = docData.Meta["title"],
@@ -86,56 +106,74 @@ namespace AntDesign.Docs.Generator
                                 ApiDoc = docData.apiDoc.Replace("<h2>API</h2>", $"<h2 id=\"API\"><span>API</span><a href=\"{language}/components/{docData.Meta["title"].ToLower()}#API\" class=\"anchor\">#</a></h2>"),
                                 Cols = docData.Meta.TryGetValue("cols", out var cols) ? int.Parse(cols) : (int?)null,
                                 Cover = docData.Meta.TryGetValue("cover", out var cover) ? cover : null,
-                            };
-                        }).ToList();
+                            });
+                        }).ToArray();
+                    })
+                    .GroupBy(x => x.language)
+                    .ToDictionary(x => x.Key, x =>
+                    {
+                        return x.GroupBy(o => o.Item2.Category)
+                            .ToDictionary(k => k.Key, 
+                                k => k
+                                .GroupBy(j => j.Item2.Type)
+                                .Select(j =>
+                                {
+                                    return new DemoMenuItem()
+                                    {
+                                        Order = _sortMap[j.Key],
+                                        Title = j.Key,
+                                        Type = "itemGroup",
+                                        Children = j.Select(o => new DemoMenuItem()
+                                        {
+                                            Title = o.Item2.Title,
+                                            SubTitle = o.Item2.SubTitle,
+                                            //Url = $"{directory.Name.ToLowerInvariant()}/{x.Value.Title.ToLower()}",
+                                            Type = "menuItem",
+                                            Cover = o.Item2.Cover,
+                                        }).ToArray()
+                                    };
+                                }).ToArray()
+                            );
                     });
 
-                foreach (var doc in docFiles.GroupBy(static x => x.file.Path.Split('\\').Last().Split('.')[1]))
+                foreach (var lang in new[] { "zh-CN", "en-US" })
                 {
-                    foreach (var item in doc)
+                    List<DemoMenuItem> menu = new List<DemoMenuItem>();
+
+                    var children = docsMenuI18N[lang].OrderBy(x => x.Order).ToArray();
+
+                    menu.Add(new DemoMenuItem()
                     {
-                        Dictionary<string, string> docData = DocParser.ParseHeader(item.content);
-                        docsMenuList.Add(new()
+                        Order = 0,
+                        Title = lang == "zh-CN" ? "文档" : "Docs",
+                        Type = "subMenu",
+                        Url = "docs",
+                        Children = children
+                    });
+
+                    var categoryComponent = componentDocs[lang];
+
+                    foreach (var component in categoryComponent)
+                    {
+                        if (!_demoCategoryMap.ContainsKey(component.Key))
                         {
-                            [doc.Key] = new DemoMenuItem()
-                            {
-                                Order = float.TryParse(docData["order"], out var order) ? order : 0,
-                                Title = docData["title"],
-                                Url = $"docs/{item.file.Path.Split('\\').Last().Split('.')[1]}",
-                                Type = "menuItem"
-                            }
+                            continue;
+                        }
+                        menu.Add(new DemoMenuItem()
+                        {
+                            Order = Array.IndexOf(_demoCategoryMap.Select(x => x.Key).ToArray(), component.Key) + 1,
+                            Title = lang == "zh-CN" ? _demoCategoryMap[component.Key] : component.Key,
+                            Type = "subMenu",
+                            Url = component.Key.ToLowerInvariant(),
+                            Children = component.Value.OrderBy(x => x.Order).ToArray()
                         });
                     }
+
+                    var className = $"Menu{lang}".Replace("/", "_").Replace("-", "_");
+                    var source = SourceCodeGenerator.GenerateSourceCode(menu, assembly.AssemblyName, className);
+
+                    ctx.AddSource(className, SourceText.From(source, Encoding.UTF8));
                 }
-
-                foreach (var group in componentDocs)
-                {
-                    Dictionary<string, DemoMenuItem> menu = new Dictionary<string, DemoMenuItem>();
-
-                    foreach (var item in group.Value)
-                    {
-                        menu.Add(item.Title, new DemoMenuItem()
-                        {
-                            Order = _sortMap[group.Key],
-                            Title = group.Key,
-                            Type = "itemGroup",
-                            Children = group.Value.Select(x => new DemoMenuItem()
-                            {
-                                Title = x.Title,
-                                SubTitle = x.SubTitle,
-                                Url = $"/{x.Title.ToLower()}",
-                                Type = "menuItem",
-                                Cover = x.Cover,
-                            })
-                            .OrderBy(x => x.Title)
-                            .ToArray(),
-                        });
-
-                        docsMenuList.Add(menu);
-                    }
-                }
-
-                ctx.AddSource("", SourceText.From("", Encoding.UTF8));
             });
         }
 
