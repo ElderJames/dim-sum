@@ -6,7 +6,7 @@
   </PropertyGroup>
 
   <ItemGroup>
-    <PackageReference Include="AntDesign" Version="0.19.5.1" />
+    <PackageReference Include="AntDesign" Version="0.0.1-v5-*" />
     <PackageReference Include="AntDesign.Extensions.Localization" Version="0.19.5.1" />
     <PackageReference Include="Microsoft.AspNetCore.Components.CustomElements" Version="8.0.7" />
     <PackageReference Include="Microsoft.Extensions.Localization" Version="8.0.7" />

@@ -15,6 +15,16 @@
 		<PackageReference Include="AntDesign.Charts" Version="0.2.0" />
 	</ItemGroup>
 
+
+	<ItemGroup>
+		<DocFiles Include="$(SolutionDir)docs\**\*.*" />
+		<DocFiles Include="$(SolutionDir)\CHANGELOG.*.*" />
+	</ItemGroup>
+
+	<Target Name="RunCli" BeforeTargets="Build" >
+		<Copy SourceFiles="@(DocFiles)" DestinationFolder="$(ProjectDir)\wwwroot\docs\%(RecursiveDir)" ContinueOnError="true" />
+	</Target>
+
 	<ItemGroup>
 		<ProjectReference Include="..\AntDesign.Docs.Generator\AntDesign.Docs.Generator.csproj" OutputItemType="Analyzer" ReferenceOutputAssembly="false" />
 		<ProjectReference Include="..\AntDesign.Docs\AntDesign.Docs.csproj" />
