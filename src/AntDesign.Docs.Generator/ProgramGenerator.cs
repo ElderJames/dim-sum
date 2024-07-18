@@ -18,7 +18,9 @@ namespace AntDesign.Docs.Generator
                 {
                     WebApplication.CreateBuilder(args).RunBlazorSite(options =>
                     {
-                        options.RegisterCustomElements();
+                        options.ConfigComponent(rootComponents => rootComponents.RegisterCustomElements());
+                        options.Menus.Add("zh-CN", Menuzh_CN.Data);
+                        options.Menus.Add("en-US", Menuen_US.Data);
                     });
                 }
             }

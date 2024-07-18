@@ -1,4 +1,5 @@
-﻿using AntDesign.Docs.Services;
+﻿using AntDesign.Docs;
+using AntDesign.Docs.Services;
 using Microsoft.AspNetCore.Components.Web;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
@@ -14,15 +15,23 @@ namespace Microsoft.AspNetCore.Builder
 {
     public static class WebApplicationBuilderExtensions
     {
-        public static void RunBlazorSite(this WebApplicationBuilder builder, Action<IJSComponentConfiguration> action)
+        public static void RunBlazorSite(this WebApplicationBuilder builder, Action<SiteGeneratorOptions> action)
         {
+            SiteGeneratorOptions siteOptions = new();
+            action.Invoke(siteOptions);
+
             // Add services to the container.
             builder.Services.AddRazorComponents()
                 .AddInteractiveServerComponents(options =>
                 {
-                    action.Invoke(options.RootComponents);
+                    siteOptions.SetRootComponents(options.RootComponents);
                 });
 
+
+            builder.Services.PostConfigure<SiteGeneratorOptions>(options =>
+            {
+                options.Menus = siteOptions.Menus;
+            });
             builder.Services.AddAntDesignDocs();
 
             var app = builder.Build();
