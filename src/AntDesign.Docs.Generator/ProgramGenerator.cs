@@ -31,8 +31,6 @@ namespace AntDesign.Docs.Generator
             context.RegisterPostInitializationOutput(ctx => ctx.AddSource(
                "Program.g.cs",
                SourceText.From(Template, Encoding.UTF8)));
-
-
         }
     }
 }

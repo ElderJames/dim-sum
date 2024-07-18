@@ -5,6 +5,7 @@ using Markdig;
 using Markdig.Extensions.Yaml;
 using Markdig.Renderers;
 using Markdig.Syntax;
+using Markdown.ColorCode;
 using YamlDotNet.Serialization;
 using YamlDotNet.Serialization.NamingConventions;
 
@@ -17,9 +18,11 @@ namespace AntDesign.Docs.Generator.Utils
             var pipeline = new MarkdownPipelineBuilder()
                 .UseYamlFrontMatter()
                 .UsePipeTables()
+                .UseAdvancedExtensions()
+                .UseColorCode()
                 .Build();
 
-            var document = Markdown.Parse(input, pipeline);
+            var document = Markdig.Markdown.Parse(input, pipeline);
             var yamlBlock = document.Descendants<YamlFrontMatterBlock>().FirstOrDefault();
 
             Dictionary<string, string> meta = null;
@@ -67,9 +70,11 @@ namespace AntDesign.Docs.Generator.Utils
         {
             var pipeline = new MarkdownPipelineBuilder()
                 .UseYamlFrontMatter()
+                .UseAdvancedExtensions()
+                .UseColorCode()
                 .Build();
 
-            var document = Markdown.Parse(input, pipeline);
+            var document = Markdig.Markdown.Parse(input, pipeline);
             var yamlBlock = document.Descendants<YamlFrontMatterBlock>().FirstOrDefault();
 
             DescriptionYaml meta = null;
@@ -145,13 +150,15 @@ namespace AntDesign.Docs.Generator.Utils
         {
             var pipeline = new MarkdownPipelineBuilder()
                 .UseYamlFrontMatter()
+                .UseAdvancedExtensions()
+                .UseColorCode()
                 .Build();
 
             var writer = new StringWriter();
             var renderer = new HtmlRenderer(writer);
             pipeline.Setup(renderer);
 
-            var document = Markdown.Parse(input, pipeline);
+            var document = Markdig.Markdown.Parse(input, pipeline);
             var yamlBlock = document.Descendants<YamlFrontMatterBlock>().FirstOrDefault();
 
             Dictionary<string, string> meta = null;
@@ -170,13 +177,15 @@ namespace AntDesign.Docs.Generator.Utils
             var pipeline = new MarkdownPipelineBuilder()
                 .UseYamlFrontMatter()
                 .UsePipeTables()
+                .UseAdvancedExtensions()
+                .UseColorCode()
                 .Build();
 
             StringWriter writer = new StringWriter();
             var renderer = new HtmlRenderer(writer);
             pipeline.Setup(renderer);
 
-            MarkdownDocument document = Markdown.Parse(input, pipeline);
+            MarkdownDocument document = Markdig.Markdown.Parse(input, pipeline);
             var yamlBlock = document.Descendants<YamlFrontMatterBlock>().FirstOrDefault();
             var title = string.Empty;
             var order = 0f;

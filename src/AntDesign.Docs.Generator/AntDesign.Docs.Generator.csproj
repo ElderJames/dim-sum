@@ -1,52 +1,64 @@
 ﻿<Project Sdk="Microsoft.NET.Sdk">
 
-  <PropertyGroup>
-    <TargetFramework>netstandard2.0</TargetFramework>
-    <LangVersion>Latest</LangVersion>
-    <ImplicitUsings>enable</ImplicitUsings>
-    <Nullable>enable</Nullable>
-    <!--<EmitCompilerGeneratedFiles>true</EmitCompilerGeneratedFiles>
+	<PropertyGroup>
+		<TargetFramework>netstandard2.0</TargetFramework>
+		<LangVersion>Latest</LangVersion>
+		<ImplicitUsings>enable</ImplicitUsings>
+		<Nullable>enable</Nullable>
+		<!--<EmitCompilerGeneratedFiles>true</EmitCompilerGeneratedFiles>
     <CompilerGeneratedFilesOutputPath>Generated</CompilerGeneratedFilesOutputPath>-->
-    <EnforceExtendedAnalyzerRules>true</EnforceExtendedAnalyzerRules>
-	<IsRoslynComponent>true</IsRoslynComponent>
-	<GeneratePackageOnBuild>true</GeneratePackageOnBuild> <!-- Generates a package at build -->
-	<IncludeBuildOutput>false</IncludeBuildOutput>  <!-- Do not include the generator as a lib dependency -->
-	<NoWarn>$(NoWarn);RS2008</NoWarn>
-  </PropertyGroup>
-	
-  <ItemGroup>
-  	<Compile Include="..\Shared\DemoComponent.cs" Link="Shared\DemoComponent.cs" />
-  	<Compile Include="..\Shared\DemoMenuItem.cs" Link="Shared\DemoMenuItem.cs" />
-  	<Compile Include="..\Shared\DocsFile.cs" Link="Shared\DocsFile.cs" />
-  </ItemGroup>
-	
-  <ItemGroup>
-    <PackageReference Include="Microsoft.CodeAnalysis.Analyzers" Version="3.3.4">
-  	  <PrivateAssets>all</PrivateAssets>
-  	  <IncludeAssets>runtime; build; native; contentfiles; analyzers; buildtransitive</IncludeAssets>
-    </PackageReference>
-    <PackageReference Include="Microsoft.CodeAnalysis.CSharp" Version="4.10.0" />
+		<EnforceExtendedAnalyzerRules>true</EnforceExtendedAnalyzerRules>
+		<IsRoslynComponent>true</IsRoslynComponent>
+		<GeneratePackageOnBuild>true</GeneratePackageOnBuild>
+		<!-- Generates a package at build -->
+		<IncludeBuildOutput>false</IncludeBuildOutput>
+		<!-- Do not include the generator as a lib dependency -->
+		<NoWarn>$(NoWarn);RS2008</NoWarn>
+	</PropertyGroup>
 
-    <None Include="$(OutputPath)\$(AssemblyName).dll" Pack="true" PackagePath="analyzers/dotnet/cs" Visible="false" />
-  </ItemGroup>
+	<ItemGroup>
+		<Compile Include="..\Shared\DemoComponent.cs" Link="Shared\DemoComponent.cs" />
+		<Compile Include="..\Shared\DemoMenuItem.cs" Link="Shared\DemoMenuItem.cs" />
+		<Compile Include="..\Shared\DocsFile.cs" Link="Shared\DocsFile.cs" />
+	</ItemGroup>
 
-  <ItemGroup>
-  	<PackageReference Include="Markdig" Version="0.37.0" PrivateAssets="all" GeneratePathProperty="true" />
-	<PackageReference Include="YamlDotNet" Version="16.0.0" PrivateAssets="all" GeneratePathProperty="true" />
-  	<None Include="$(PkgMarkdig)\lib\netstandard2.0\*.dll" Pack="true" PackagePath="analyzers/dotnet/cs" Visible="false" />
-    <None Include="$(PkgYamlDotNet)\lib\netstandard2.0\*.dll" Pack="true" PackagePath="analyzers/dotnet/cs" Visible="false" />
-  </ItemGroup>
-  
-  <!-- https://github.com/dotnet/roslyn/discussions/47517-->
-  <PropertyGroup>
-  	<GetTargetPathDependsOn>$(GetTargetPathDependsOn);GetDependencyTargetPaths</GetTargetPathDependsOn>
-  </PropertyGroup>
-  
-  <Target Name="GetDependencyTargetPaths">
-  	<ItemGroup>
-  	  <TargetPathWithTargetPlatformMoniker Include="$(PKGMarkdig)\lib\netstandard2.0\Markdig.dll" IncludeRuntimeDependency="false" />
-	  <TargetPathWithTargetPlatformMoniker Include="$(PKGYamlDotNet)\lib\netstandard2.0\YamlDotNet.dll" IncludeRuntimeDependency="false" />
-  	</ItemGroup>
-  </Target>
+	<ItemGroup>
+
+		<PackageReference Include="Microsoft.CodeAnalysis.Analyzers" Version="3.3.4">
+			<PrivateAssets>all</PrivateAssets>
+			<IncludeAssets>runtime; build; native; contentfiles; analyzers; buildtransitive</IncludeAssets>
+		</PackageReference>
+		<PackageReference Include="Microsoft.CodeAnalysis.CSharp" Version="4.10.0" />
+
+		<None Include="$(OutputPath)\$(AssemblyName).dll" Pack="true" PackagePath="analyzers/dotnet/cs" Visible="false" />
+	</ItemGroup>
+
+	<ItemGroup>
+		<PackageReference Include="Markdig" Version="0.37.0" PrivateAssets="all" GeneratePathProperty="true" />
+		<PackageReference Include="YamlDotNet" Version="16.0.0" PrivateAssets="all" GeneratePathProperty="true" />
+		<PackageReference Include="Markdown.ColorCode" Version="2.3.0" PrivateAssets="all" GeneratePathProperty="true" />
+		<PackageReference Include="ColorCode.Core" Version="2.0.15" PrivateAssets="all" GeneratePathProperty="true" />
+		<PackageReference Include="ColorCode.HTML" Version="2.0.15" PrivateAssets="all" GeneratePathProperty="true"/>
+		<None Include="$(PkgMarkdig)\lib\netstandard2.0\*.dll" Pack="true" PackagePath="analyzers/dotnet/cs" Visible="false" />
+		<None Include="$(PkgYamlDotNet)\lib\netstandard2.0\*.dll" Pack="true" PackagePath="analyzers/dotnet/cs" Visible="false" />
+		<None Include="$(PkgMarkdown_ColorCode)\lib\netstandard2.0\*.dll" Pack="true" PackagePath="analyzers/dotnet/cs" Visible="false" />
+		<None Include="$(PkgColorCode_Core)\lib\netstandard2.0\*.dll" Pack="true" PackagePath="analyzers/dotnet/cs" Visible="false" />
+		<None Include="$(PkgColorCode_HTML)\lib\netstandard2.0\*.dll" Pack="true" PackagePath="analyzers/dotnet/cs" Visible="false" />
+	</ItemGroup>
+
+	<!-- https://github.com/dotnet/roslyn/discussions/47517-->
+	<PropertyGroup>
+		<GetTargetPathDependsOn>$(GetTargetPathDependsOn);GetDependencyTargetPaths</GetTargetPathDependsOn>
+	</PropertyGroup>
+
+	<Target Name="GetDependencyTargetPaths">
+		<ItemGroup>
+			<TargetPathWithTargetPlatformMoniker Include="$(PKGMarkdig)\lib\netstandard2.0\Markdig.dll" IncludeRuntimeDependency="false" />
+			<TargetPathWithTargetPlatformMoniker Include="$(PKGYamlDotNet)\lib\netstandard2.0\YamlDotNet.dll" IncludeRuntimeDependency="false" />
+			<TargetPathWithTargetPlatformMoniker Include="$(PKGMarkdown_ColorCode)\lib\netstandard2.0\Markdown.ColorCode.dll" IncludeRuntimeDependency="false" />
+			<TargetPathWithTargetPlatformMoniker Include="$(PKGColorCode_Core)\lib\netstandard2.0\ColorCode.Core.dll" IncludeRuntimeDependency="false" />
+			<TargetPathWithTargetPlatformMoniker Include="$(PKGColorCode_HTML)\lib\netstandard2.0\ColorCode.HTML.dll" IncludeRuntimeDependency="false" />
+		</ItemGroup>
+	</Target>
 
 </Project>
