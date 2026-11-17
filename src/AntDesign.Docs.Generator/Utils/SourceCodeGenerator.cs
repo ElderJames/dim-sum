@@ -101,10 +101,37 @@ public class SourceCodeGenerator
 
         foreach (var property in obj.GetType().GetProperties())
         {
+            if (property.Name == "Component")
+            {
+                var componentTypeName = obj.GetType().GetProperty("TypeName")?.GetValue(obj) as string;
+                if (!string.IsNullOrWhiteSpace(componentTypeName))
+                {
+                    propertyCode.AppendLine($"                Component = builder => {{ builder.OpenComponent<global::{componentTypeName}>(0); builder.CloseComponent(); }},");
+                }
+                continue;
+            }
+
+            // Type names are consumed here to emit a strongly typed renderer;
+            // they are not copied into the generated runtime metadata.
+            if (property.Name == "TypeName")
+                continue;
+
             if (property.PropertyType == typeof(Type))
             {
                 var typeName = obj.GetType().GetProperty(property.Name + "Name").GetValue(obj);
-                propertyCode.AppendLine($"                {property.Name} = typeof({typeName}),");
+                propertyCode.AppendLine($"                {property.Name} = typeof(global::{typeName}),");
+                continue;
+            }
+
+            if (property.GetValue(obj) is IDictionary dictionary)
+            {
+                propertyCode.AppendLine($"                {property.Name} = new {GetGenericTypeName(property.PropertyType)}");
+                propertyCode.AppendLine("                {");
+                foreach (DictionaryEntry entry in dictionary)
+                {
+                    propertyCode.AppendLine($"                    [{GetValueCode(entry.Key)}] = {GetValueCode(entry.Value)},");
+                }
+                propertyCode.AppendLine("                },");
                 continue;
             }
 

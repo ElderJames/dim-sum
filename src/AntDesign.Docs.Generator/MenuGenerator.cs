@@ -49,12 +49,12 @@ namespace AntDesign.Docs.Generator
         public void Initialize(IncrementalGeneratorInitializationContext context)
         {
             var files = context.AdditionalTextsProvider
-                .Where(static (text) => text.Path.Contains("\\Demos\\") && text.Path.Contains("index.") && text.Path.EndsWith(".md"))
+                .Where(static (text) => text.Path.Replace('\\', '/').Contains("/Demos/") && text.Path.Replace('\\', '/').Contains("/doc/index.") && text.Path.EndsWith(".md"))
                 .Select(static (text, token) => (file: text, content: text.GetText(token)!.ToString()))
                 .Collect();
 
             var docs = context.AdditionalTextsProvider
-               .Where(static (text) => text.Path.Contains("\\docs\\") && text.Path.EndsWith(".md"))
+               .Where(static (text) => text.Path.Replace('\\', '/').Contains("/wwwroot/docs/") && text.Path.EndsWith(".md"))
                .Select(static (text, token) => (file: text, content: text.GetText(token)!.ToString()))
                .Collect();
 
@@ -68,7 +68,7 @@ namespace AntDesign.Docs.Generator
                 var docFiles = pair.Left.Right;
                 var assembly = pair.Right;
                 IList<(string, DemoMenuItem)> docsMenuList = [];
-                foreach (var doc in docFiles.GroupBy(static x => x.file.Path.Split('\\').Last().Split('.')[1]))
+                foreach (var doc in docFiles.GroupBy(static x => Path.GetFileName(x.file.Path).Split('.')[1]))
                 {
                     foreach (var item in doc)
                     {
@@ -77,7 +77,7 @@ namespace AntDesign.Docs.Generator
                         {
                             Order = float.TryParse(docData["order"], out var order) ? order : 0,
                             Title = docData["title"],
-                            Url = $"/{doc.Key}/docs/{item.file.Path.Split('\\').Last().Split('.')[0]}",
+                            Url = $"/{doc.Key}/docs/{Path.GetFileName(item.file.Path).Split('.')[0]}",
                             Type = "menuItem"
                         }));
                     }
@@ -185,18 +185,18 @@ namespace AntDesign.Docs.Generator
 
         private static string GetDemoName(string filePath)
         {
-            return filePath.ToLowerInvariant().Replace(".md", "").Replace(".razor", "").Replace("Demo", "").Replace("_", "");
+            return Path.GetFileNameWithoutExtension(filePath).ToLowerInvariant().Replace("Demo", "").Replace("_", "").Replace("-", "");
         }
         private static string GetComponentName(string filePath)
         {
-            var parts = filePath.Split('\\');
+            var parts = filePath.Replace('\\', '/').Split('/');
             var demoIndex = Array.IndexOf(parts, "Demos");
             return $"{parts[demoIndex + 1]}/{parts[demoIndex + 2]}";
         }
 
         private static string GetLocale(string filePath)
         {
-            return filePath.Split('\\').Last().Replace("index.", "").Replace(".md", "");
+            return Path.GetFileName(filePath).Replace("index.", "").Replace(".md", "");
         }
     }
 }

@@ -218,5 +218,7 @@ namespace AntDesign.Docs.Generator.Utils
         public bool Debug { get; set; }
 
         public bool? Docs { get; set; }
+
+        public List<string> AdditionalFiles { get; set; }
     }
 }

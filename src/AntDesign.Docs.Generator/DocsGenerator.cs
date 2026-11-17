@@ -16,7 +16,7 @@ namespace AntDesign.Docs.Generator
         public void Initialize(IncrementalGeneratorInitializationContext context)
         {
             var pipeline = context.AdditionalTextsProvider
-                .Where(static (text) => text.Path.Contains("\\docs\\") && text.Path.EndsWith(".md"))
+                .Where(static (text) => text.Path.Replace('\\', '/').Contains("/wwwroot/docs/") && text.Path.EndsWith(".md"))
                 .Select(static (text, cancellationToken) =>
                 {
                     var fileNameParts = Path.GetFileNameWithoutExtension(text.Path).Split('.');
@@ -57,7 +57,7 @@ namespace AntDesign.Docs.Generator
 
             return template.Replace("{{html}}", $"\"\"\"\r\n{doc.html}\r\n\"\"\"")
                 .Replace("{{url}}", $"/{locale}/docs/{name}")
-                .Replace("{{className}}", $"{name}{locale}".ToPascalCase());
+                .Replace("{{className}}", $"Docs{name}{locale}".ToPascalCase());
         }
     }
 }

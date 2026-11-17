@@ -35,8 +35,12 @@ namespace AntDesign.Docs
 
         public string Code { get; set; }
 
-        public Type Type { get; set; }
+        /// <summary>Compile-time renderer emitted by the source generator.</summary>
+        public object Component { get; set; }
 
+        public string SourcePath { get; set; }
+
+        // Generator-only type name. SourceCodeGenerator consumes it to emit Component.
         public string TypeName { get; set; }
 
         public string Style { get; set; }
@@ -48,5 +52,7 @@ namespace AntDesign.Docs
         public bool? Docs { get; set; }
 
         public bool Debug { get; set; }
+
+        public Dictionary<string, string> AdditionalFiles { get; set; }
     }
 }

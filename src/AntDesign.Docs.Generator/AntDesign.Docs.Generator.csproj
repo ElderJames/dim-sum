@@ -17,6 +17,8 @@
 	</PropertyGroup>
 
 	<ItemGroup>
+		<!-- The production documentation host already owns its Program; this sample-only generator is opt-in. -->
+		<Compile Remove="ProgramGenerator.cs" />
 		<Compile Include="..\Shared\DemoComponent.cs" Link="Shared\DemoComponent.cs" />
 		<Compile Include="..\Shared\DemoMenuItem.cs" Link="Shared\DemoMenuItem.cs" />
 		<Compile Include="..\Shared\DocsFile.cs" Link="Shared\DocsFile.cs" />

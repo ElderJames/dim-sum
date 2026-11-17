@@ -3,7 +3,7 @@ using System.Collections.Generic;
 using System.Diagnostics.CodeAnalysis;
 using System.Text;
 
-namespace AntDesign.Docs.Build.CLI.Utils
+namespace AntDesign.Docs.Generator.Utils
 {
     public class MenuComparer : IComparer<string>
     {
