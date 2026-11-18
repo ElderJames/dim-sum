@@ -55,18 +55,34 @@ namespace AntDesign.Docs.Generator
                     });
                 });
 
-                // Demo filenames are commonly reused across components (for
-                // example, `Multiple.razor`). Group within the owning
-                // component so unrelated demos cannot merge and get dropped
-                // by the Razor/Markdown pair check below.
-                foreach (var x in demoDir
-                    .GroupBy(static file => (Component: GetComponentName(file.file.Path), Demo: GetDemoName(file.file.Path)))
-                    .Where(group => group.Count() == 2))
+                // Pair each demo markdown file with its Razor file instead of requiring
+                // exactly two files to share a punctuation-insensitive name. Names such as
+                // `Head.razor` and the legacy `Head_.razor` normalize alike; the exact stem
+                // match must win so an unrelated file cannot suppress the documented demo.
+                var demoFiles = demoDir.ToArray();
+                foreach (var md in demoFiles.Where(file => file.file.Path.EndsWith(".md")))
                 {
-                    var razor = x.FirstOrDefault(x => x.file.Path.EndsWith(".razor"));
-                    var md = x.FirstOrDefault(x => x.file.Path.EndsWith(".md"));
+                    var componentName = GetComponentName(md.file.Path);
+                    if (!components.TryGetValue(componentName, out var componentLanguages))
+                    {
+                        continue;
+                    }
 
-                    if (razor.file == null || md.file == null || !components.TryGetValue(x.Key.Component, out var componentLanguages))
+                    var markdownStem = Path.GetFileNameWithoutExtension(md.file.Path);
+                    var normalizedName = GetDemoName(md.file.Path);
+                    var candidates = demoFiles.Where(file => file.file.Path.EndsWith(".razor")
+                            && GetComponentName(file.file.Path) == componentName
+                            && GetDemoName(file.file.Path) == normalizedName)
+                        .ToArray();
+                    var exactMatches = candidates.Where(file => string.Equals(
+                            Path.GetFileNameWithoutExtension(file.file.Path), markdownStem,
+                            StringComparison.OrdinalIgnoreCase))
+                        .ToArray();
+                    var razor = exactMatches.Length == 1
+                        ? exactMatches[0]
+                        : exactMatches.Length == 0 && candidates.Length == 1 ? candidates[0] : default;
+
+                    if (razor.file == null)
                     {
                         continue;
                     }
@@ -87,7 +103,7 @@ namespace AntDesign.Docs.Generator
                             Order = descriptionContent.Meta.Order,
                             Iframe = descriptionContent.Meta.Iframe,
                             Link = descriptionContent.Meta.Link,
-                        Code = razor.content,
+                            Code = razor.content,
                             Description = description,
                             Name = Path.GetFileNameWithoutExtension(md.file.Path),
                             Style = descriptionContent.Style,
@@ -100,8 +116,8 @@ namespace AntDesign.Docs.Generator
                                 var additionalFile = files.FirstOrDefault(file => NormalizePath(file.file.Path).EndsWith(demoDirectory + normalizedPath, StringComparison.Ordinal));
                                 return (path, content: additionalFile.file == null ? null : additionalFile.content);
                             }).Where(file => file.content != null).ToDictionary(file => file.path, file => file.content),
-                        TypeName = compilation.AssemblyName + NormalizePath(razor.file.Path).Substring(NormalizePath(razor.file.Path).IndexOf("/Demos/", StringComparison.Ordinal)).Replace("/", ".").Replace(".razor", ""),
-                        SourcePath = NormalizePath(razor.file.Path).Substring(NormalizePath(razor.file.Path).IndexOf("/Demos/", StringComparison.Ordinal) + 1),
+                            TypeName = compilation.AssemblyName + NormalizePath(razor.file.Path).Substring(NormalizePath(razor.file.Path).IndexOf("/Demos/", StringComparison.Ordinal)).Replace("/", ".").Replace(".razor", ""),
+                            SourcePath = NormalizePath(razor.file.Path).Substring(NormalizePath(razor.file.Path).IndexOf("/Demos/", StringComparison.Ordinal) + 1),
                         });
                     }
                 }
